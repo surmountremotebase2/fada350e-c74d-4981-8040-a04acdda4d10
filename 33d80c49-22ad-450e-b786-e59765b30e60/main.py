@@ -4,9 +4,9 @@ from surmount.logging import log
 class TradingStrategy(Strategy):
 
     def __init__(self):
-        self.ticker = "AAPL"
+        self.ticker = "spy"
         self.amount = 100  # Dollar amount to invest at each interval
-        self.investment_interval = 30  # Number of days between investments
+        self.investment_interval = 240  # Number of days between investments
         self.count = 0
         self.target_allocation = 0
 
