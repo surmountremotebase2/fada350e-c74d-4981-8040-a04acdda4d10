@@ -34,7 +34,7 @@ class TradingStrategy(Strategy):
             elif latest_rsi < 25 or (rsi_values[-2] < 30 and latest_rsi >= 30):
                 # If RSI < 25 or if it crosses over 30 (i.e., was below 30 and now 30 or above),
                 # allocate 0% to SHY implying staying or moving back to cash or other assets
-                allocation[self.shy_ticker] = 0.0
+                allocation[self.spy_ticker] = 1.0
             # Else keep the previous allocation (not changing allocation if conditions don't match)
 
         return TargetAllocation(allocation)
