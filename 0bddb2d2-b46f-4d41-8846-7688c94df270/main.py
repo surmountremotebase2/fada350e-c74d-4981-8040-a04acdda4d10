@@ -1,5 +1,5 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import MACD, LWMA
+from surmount.technical_indicators import MACD, MA
 from surmount.logging import log
 import pandas as pd
 
@@ -19,7 +19,7 @@ class TradingStrategy(Strategy):
         self.signal_period = 9
         
         # LWMA indicator period (assuming surmount has an LWMA or this represents a generic MA with 'linear' type)
-        self.lwma_period = 55
+        self.MA_period = 55
 
     @property
     def assets(self):
