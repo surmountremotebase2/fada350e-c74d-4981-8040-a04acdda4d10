@@ -14,7 +14,7 @@ class TradingStrategy(Strategy):
     
     @property
     def interval(self):
-        return "1week"  # Use weekly data for this strategy
+        return "W"  # Use weekly data for this strategy, adjusted format
 
     @property
     def assets(self):
