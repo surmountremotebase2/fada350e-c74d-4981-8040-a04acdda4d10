@@ -7,8 +7,8 @@ class TradingStrategy(Strategy):
         # Define the tickers to monitor and trade
         self.spy_ticker = "SPY"  # SPY for monitoring
         self.shy_ticker = "SHY"  # SHY for trading
-        self.tqqq_ticker = "TQQQ"  # SHY for trading
-        self.uvxy_ticker = "UVXY"  # SHY for trading
+        self.tqqq_ticker = "TQQQ"  # TQQQ for trading
+        self.uvxy_ticker = "UVXY"  # UVXY for trading
 
     @property
     def interval(self):
@@ -20,22 +20,25 @@ class TradingStrategy(Strategy):
         return [self.spy_ticker, self.shy_ticker, self.tqqq_ticker, self.uvxy_ticker]  
 
     def run(self, data):
-        # Initialize allocation to SHY as 0
-        allocation = {self.spy_ticker: 100.0}
+        # Initialize allocation to SPY as 100%
+        allocation = {self.spy_ticker: 100.0, self.shy_ticker: 0.0, self.tqqq_ticker: 0.0, self.uvxy_ticker: 0.0}
         
-        # Calculate the 14-day RSI for SPY
+        # Calculate the 10-day RSI for TQQQ
         rsi_values = RSI(self.tqqq_ticker, data["ohlcv"], 10)
         
         if rsi_values:
             latest_rsi = rsi_values[-1]  # Get the most recent RSI value
 
             # Check the RSI conditions to decide on the allocation
-            if latest_rsi => 80:
-                # If RSI > 80, allocate 100% to SHY
+            if latest_rsi >= 80:
+                # If RSI >= 80, allocate 50% to SHY and 50% to UVXY
                 allocation[self.uvxy_ticker] = 50.0
                 allocation[self.shy_ticker] = 50.0
+                allocation[self.spy_ticker] = 0.0
             elif latest_rsi < 80:
+                # If RSI < 80, allocate 100% to SPY
                 allocation[self.spy_ticker] = 100.0
-            # Else keep the previous allocation (not changing allocation if conditions don't match)
+                allocation[self.uvxy_ticker] = 0.0
+                allocation[self.shy_ticker] = 0.0
 
         return TargetAllocation(allocation)
