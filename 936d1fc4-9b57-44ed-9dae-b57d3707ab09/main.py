@@ -5,7 +5,7 @@ import logging
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["SPY", "QQQ", "TLT"]
+        self.tickers = ["SPY"]
         logging.basicConfig(level=logging.INFO)
 
     @property
@@ -25,10 +25,10 @@ class TradingStrategy(Strategy):
     def run(self, data):
         allocation_dict = {ticker: 0.0 for ticker in self.tickers}
         
-        for ticker in self.tickers:
-            if ticker not in data["ohlcv"] or not data["ohlcv"][ticker]:
-                logging.info(f"No OHLCV data for ticker: {ticker}")
-                continue
+        #for ticker in self.tickers:
+         #   if ticker not in data["ohlcv"] or not data["ohlcv"][ticker]:
+          #      logging.info(f"No OHLCV data for ticker: {ticker}")
+           #     continue
             
             daily_data = data["ohlcv"][ticker][-1]
             rsi_values = RSI(ticker, data["ohlcv"][ticker], 10)
