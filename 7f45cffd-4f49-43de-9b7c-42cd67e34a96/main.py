@@ -24,9 +24,11 @@ class TradingStrategy(Strategy):
         high = data['high']
         close = data['close']
         # Formula IBS = (Chiusura - Min) / (Max - Min)
+        rsi= 
         return (close - low) / (high - low) if (high - low) > 0 else 0.5
 
     def run(self, data):
+        rsi_values = RSI(self.tickers, data["ohlcv"], 10)
         allocation_dict = {}
         for ticker in self.tickers:
             daily_data = data["ohlcv"][-1][ticker]  # Ultimi dati disponibili
@@ -37,12 +39,14 @@ class TradingStrategy(Strategy):
             # Strategia di allocazione in base all'IBS
             # Valori IBS bassi (<0.3) indicano un potenziale acquisto (reversione alla media prevista)
             # Valori IBS alti (>0.7) suggeriscono di evitare acquisti o eventualmente vendere
-            if ibs < 0.3:
-                allocation_dict[ticker] = 1 / len(self.tickers)  # Allocazione equa
-            elif ibs > 0.7:
-                allocation_dict[ticker] = 0  # Nessuna allocazione
-            else:
-                allocation_dict[ticker] = 0.5 / len(self.tickers)  # Allocatione neutrale
+            if rsi_values:
+                latest_rsi = rsi_values[-1]
+                if ibs < 0.3 and rsi_values<30:
+                    allocation_dict[ticker] = 1 / len(self.tickers)  # Allocazione equa
+                elif ibs > 0.7 and rsi_values>70:
+                    allocation_dict[ticker] = 0  # Nessuna allocazione
+                else:
+                    allocation_dict[ticker] = 0.5 / len(self.tickers)  # Allocatione neutrale
 
         return TargetAllocation(allocation_value=allocation_dict)
 
