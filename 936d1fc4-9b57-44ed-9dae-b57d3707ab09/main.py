@@ -5,7 +5,7 @@ from surmount.data import Asset
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the tickers to monitor and trade
-        self.tickers = ["SPY", "QQQ", "TLT"]
+        self.tickers = ['SPY, QQQ, TLT']
 
     @property
     def interval(self):
