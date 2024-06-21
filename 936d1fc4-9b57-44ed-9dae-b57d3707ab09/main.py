@@ -44,7 +44,7 @@ class TradingStrategy(Strategy):
                 elif ibs > 0.7 and latest_rsi > 50:
                     allocation_dict[ticker] = 0.0
                 else:
-                    allocation_dict[ticker] = 0.0
+                    allocation_dict[ticker] = 0.0  # Neutral allocation
 
-        logging.info(f"Allocation dict: {allocation_dict}")
+        logging.info(f"Final Allocation dict: {allocation_dict}")
         return TargetAllocation(allocation_dict)
