@@ -1,5 +1,6 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import RSI  # Make sure to import needed functions
+from surmount.technical_indicators import RSI
+from surmount.data import Asset
 
 class TradingStrategy(Strategy):
     def __init__(self):
