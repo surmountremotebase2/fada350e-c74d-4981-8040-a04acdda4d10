@@ -1,11 +1,12 @@
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import RSI
 from surmount.data import Asset
+import logging
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        # Define the tickers to monitor and trade
         self.tickers = ["SPY", "QQQ", "TLT"]
+        logging.basicConfig(level=logging.INFO)
 
     @property
     def interval(self):
@@ -13,38 +14,37 @@ class TradingStrategy(Strategy):
 
     @property
     def assets(self):
-        # Assets to trade
         return self.tickers
 
     def calculate_ibs(self, data):
-        """Calculates Internal Bar Strength (IBS) for a ticker."""
         low = data['low']
         high = data['high']
         close = data['close']
         return (close - low) / (high - low) if (high - low) > 0 else 0.5
 
     def run(self, data):
-        # Initialize allocation dictionary
         allocation_dict = {ticker: 0.0 for ticker in self.tickers}
         
         for ticker in self.tickers:
-            # Verifica che ci siano dati OHLCV per il ticker
             if ticker not in data["ohlcv"] or not data["ohlcv"][ticker]:
+                logging.info(f"No OHLCV data for ticker: {ticker}")
                 continue
             
-            daily_data = data["ohlcv"][ticker][-1]  # Latest available data for the ticker
-            rsi_values = RSI(ticker, data["ohlcv"][ticker], 10)  # Calculate RSI for each ticker
-
-            # Calculate the IBS
-            ibs = self.calculate_ibs(daily_data)
+            daily_data = data["ohlcv"][ticker][-1]
+            rsi_values = RSI(ticker, data["ohlcv"][ticker], 10)
 
             if rsi_values and len(rsi_values) > 0:
                 latest_rsi = rsi_values[-1]
-                if ibs < 0.3 and latest_rsi < 30:
-                    allocation_dict[ticker] = 1.0 / len(self.tickers)  # Equal allocation
-                elif ibs > 0.7 and latest_rsi > 70:
-                    allocation_dict[ticker] = 0.0  # No allocation
+                ibs = self.calculate_ibs(daily_data)
+                
+                logging.info(f"{ticker} - IBS: {ibs}, RSI: {latest_rsi}")
+                
+                if ibs < 0.3 and latest_rsi < 50:
+                    allocation_dict[ticker] = 1.0 / len(self.tickers)
+                elif ibs > 0.7 and latest_rsi > 50:
+                    allocation_dict[ticker] = 0.0
                 else:
-                    allocation_dict[ticker] = 0.5 / len(self.tickers)  # Neutral allocation
+                    allocation_dict[ticker] = 0.0
 
+        logging.info(f"Allocation dict: {allocation_dict}")
         return TargetAllocation(allocation_dict)
