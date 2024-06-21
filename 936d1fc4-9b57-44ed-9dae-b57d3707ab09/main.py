@@ -46,4 +46,4 @@ class TradingStrategy(Strategy):
                 else:
                     allocation_dict[self.tickers] = 0.0  # Neutral allocation
 
-    return TargetAllocation(allocation)
+        return TargetAllocation(allocation)
