@@ -44,9 +44,3 @@ class TradingStrategy(Strategy):
                     allocation_dict[ticker] = 0.5 / len(self.tickers)  # Neutral allocation
 
         return TargetAllocation(allocation_dict)
-
-# Example usage
-# Assume `data` is provided by the trading platform containing OHLCV data for SPY, QQQ, and TLT
-# trading_strategy = TradingStrategy()
-# target_allocation = trading_strategy.run(data)
-# print(target_allocation)
