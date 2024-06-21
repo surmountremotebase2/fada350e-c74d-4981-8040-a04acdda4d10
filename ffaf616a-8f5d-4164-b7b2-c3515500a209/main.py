@@ -19,7 +19,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Initialize allocation to SHY as 0
-        allocation = {self.shy_ticker: 0.0}
+        allocation = {self.spy_ticker: 100.0}
         
         # Calculate the 14-day RSI for SPY
         rsi_values = RSI(self.spy_ticker, data["ohlcv"], 14)
@@ -31,9 +31,7 @@ class TradingStrategy(Strategy):
             if latest_rsi > 80:
                 # If RSI > 80, allocate 100% to SHY
                 allocation[self.shy_ticker] = 1.0
-            elif latest_rsi < 25 or (rsi_values[-2] < 30 and latest_rsi >= 30):
-                # If RSI < 25 or if it crosses over 30 (i.e., was below 30 and now 30 or above),
-                # allocate 0% to SHY implying staying or moving back to cash or other assets
+            elif latest_rsi < 80:
                 allocation[self.spy_ticker] = 1.0
             # Else keep the previous allocation (not changing allocation if conditions don't match)
 
