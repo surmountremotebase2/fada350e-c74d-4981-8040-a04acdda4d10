@@ -35,7 +35,7 @@ class TradingStrategy(Strategy):
                 allocation[self.uvxy_ticker] = 50.0
                 allocation[self.shy_ticker] = 50.0
                 allocation[self.spy_ticker] = 0.0
-        if latest_rsi < 20:
+            elif latest_rsi < 20:
                 # If RSI < 80, allocate 100% to SPY
                 allocation[self.spy_ticker] = 0.0
                 allocation[self.uvxy_ticker] = 0.0
