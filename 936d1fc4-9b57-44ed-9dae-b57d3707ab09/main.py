@@ -5,7 +5,7 @@ from surmount.data import Asset
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the tickers to monitor and trade
-        self.tickers = ['SPY, QQQ, TLT']
+        self.tickers = ["SPY", "QQQ", "TLT"]
 
     @property
     def interval(self):
@@ -16,18 +16,22 @@ class TradingStrategy(Strategy):
         # Assets to trade
         return self.tickers
 
+    def calculate_ibs(self, data):
+        """Calculates Internal Bar Strength (IBS) for a ticker."""
+        low = data['low']
+        high = data['high']
+        close = data['close']
+        return (close - low) / (high - low) if (high - low) > 0 else 0.5
+
     def run(self, data):
         # Initialize allocation dictionary
         allocation_dict = {ticker: 0.0 for ticker in self.tickers}
-
-        def calculate_ibs(self, data):
-            """Calculates Internal Bar Strength (IBS) for a ticker."""
-            low = data['low']
-            high = data['high']
-            close = data['close']
-            return (close - low) / (high - low) if (high - low) > 0 else 0.5
         
         for ticker in self.tickers:
+            # Verifica che ci siano dati OHLCV per il ticker
+            if ticker not in data["ohlcv"] or not data["ohlcv"][ticker]:
+                continue
+            
             daily_data = data["ohlcv"][ticker][-1]  # Latest available data for the ticker
             rsi_values = RSI(ticker, data["ohlcv"][ticker], 10)  # Calculate RSI for each ticker
 
