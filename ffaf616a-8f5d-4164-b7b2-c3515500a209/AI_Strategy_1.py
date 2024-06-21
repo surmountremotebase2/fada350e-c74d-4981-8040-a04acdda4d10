@@ -24,7 +24,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Calculate the weekly RSI for SPY
-        spy_rsi = RSI("SPY", data["ohlcv"], 14)  # Using a period of 14 weeks for RSI
+        spy_rsi = RSI("SPY", data["ohlcv"], 10)  # Using a period of 14 weeks for RSI
 
         # Initialize allocation_dict dict with no allocation
         allocation_dict = {"SPY": 0.0, "SHY": 0.0}
@@ -33,10 +33,10 @@ class TradingStrategy(Strategy):
             current_rsi = spy_rsi[-1]  # Get the most recent RSI value
 
             # If RSI > 70, move 100% to SHY
-            if current_rsi > 70:
+            if current_rsi > 80:
                 allocation_dict["SHY"] = 1.0
             # If RSI < 60, move 100% to SPY
-            elif current_rsi < 60:
+            elif current_rsi < 80:
                 allocation_dict["SPY"] = 1.0
             # If RSI is between 60 and 70, maintain the current allocation
             # This scenario should ideally be handled based on the prior state (not moving out of SPY unless RSI > 70),
