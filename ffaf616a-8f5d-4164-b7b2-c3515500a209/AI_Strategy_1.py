@@ -5,7 +5,7 @@ from surmount.data import Asset
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the tickers we are interested in: SPY for the S&P 500 ETF, SHY for the 1-3 Year Treasury Bond ETF
-        self.tickers = ["SPY", "SHY"]
+        self.tickers = ["SPY", "SHY","TQQQ"]
 
     @property
     def interval(self):
@@ -24,13 +24,13 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Calculate the weekly RSI for SPY
-        spy_rsi = RSI("SPY", data["ohlcv"], 10)  # Using a period of 14 weeks for RSI
+        tqqq_rsi = RSI("TQQQ", data["ohlcv"], 10)  # Using a period of 14 weeks for RSI
 
         # Initialize allocation_dict dict with no allocation
         allocation_dict = {"SPY": 0.0, "SHY": 0.0}
 
         if spy_rsi is not None:
-            current_rsi = spy_rsi[-1]  # Get the most recent RSI value
+            current_rsi = tqqq_rsi[-1]  # Get the most recent RSI value
 
             # If RSI > 70, move 100% to SHY
             if current_rsi > 80:
