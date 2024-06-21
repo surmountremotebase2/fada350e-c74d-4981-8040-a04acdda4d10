@@ -16,16 +16,16 @@ class TradingStrategy(Strategy):
         # Assets to trade
         return self.tickers
 
-    def calculate_ibs(self, data):
-        """Calculates Internal Bar Strength (IBS) for a ticker."""
-        low = data['low']
-        high = data['high']
-        close = data['close']
-        return (close - low) / (high - low) if (high - low) > 0 else 0.5
-
     def run(self, data):
         # Initialize allocation dictionary
         allocation_dict = {ticker: 0.0 for ticker in self.tickers}
+
+        def calculate_ibs(self, data):
+            """Calculates Internal Bar Strength (IBS) for a ticker."""
+            low = data['low']
+            high = data['high']
+            close = data['close']
+            return (close - low) / (high - low) if (high - low) > 0 else 0.5
         
         for ticker in self.tickers:
             daily_data = data["ohlcv"][ticker][-1]  # Latest available data for the ticker
