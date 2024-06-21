@@ -23,15 +23,15 @@ class TradingStrategy(Strategy):
         return (close - low) / (high - low) if (high - low) > 0 else 0.5
 
     def run(self, data):
-        #allocation_dict = {ticker: 0.0 for ticker in self.tickers}
+        allocation_dict = {ticker: 0.0 for ticker in self.tickers}
         
-        #for ticker in self.tickers:
-         #   if ticker not in data["ohlcv"] or not data["ohlcv"][ticker]:
-          #      logging.info(f"No OHLCV data for ticker: {ticker}")
-           #     continue
+        for ticker in self.tickers:
+            if ticker not in data["ohlcv"] or not data["ohlcv"][ticker]:
+                logging.info(f"No OHLCV data for ticker: {ticker}")
+                continue
             
-            daily_data = data["ohlcv"][self.tickers][-1]
-            rsi_values = RSI(self.tickers, data["ohlcv"][self.tickers], 10)
+            daily_data = data["ohlcv"][ticker][-1]
+            rsi_values = RSI(ticker, data["ohlcv"][ticker], 10)
 
             if rsi_values and len(rsi_values) > 0:
                 latest_rsi = rsi_values[-1]
@@ -40,10 +40,11 @@ class TradingStrategy(Strategy):
                 logging.info(f"{ticker} - IBS: {ibs}, RSI: {latest_rsi}")
                 
                 if ibs < 0.3 and latest_rsi < 50:
-                    allocation_dict[self.tickers] = 100.0 / len(self.tickers)
+                    allocation_dict[ticker] = 100.0 / len(self.tickers)
                 elif ibs > 0.7 and latest_rsi > 50:
-                    allocation_dict[self.tickers] = 0.0
+                    allocation_dict[ticker] = 0.0
                 else:
-                    allocation_dict[self.tickers] = 0.0  # Neutral allocation
+                    allocation_dict[ticker] = 0.0  # Neutral allocation
 
-        return TargetAllocation(allocation)
+        logging.info(f"Final Allocation dict: {allocation_dict}")
+        return TargetAllocation(allocation_dict)
