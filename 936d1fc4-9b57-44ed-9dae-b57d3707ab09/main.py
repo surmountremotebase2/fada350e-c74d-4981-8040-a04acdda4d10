@@ -39,9 +39,9 @@ class TradingStrategy(Strategy):
                 
                 logging.info(f"{ticker} - IBS: {ibs}, RSI: {latest_rsi}")
                 
-                if ibs < 0.3 and latest_rsi < 50:
+                if ibs < 1 and latest_rsi < 100:
                     allocation_dict[ticker] = 100.0 / len(self.tickers)
-                elif ibs > 0.7 and latest_rsi > 50:
+                elif ibs > 0 and latest_rsi > 100:
                     allocation_dict[ticker] = 0.0
                 else:
                     allocation_dict[ticker] = 0.0  # Neutral allocation
