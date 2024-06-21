@@ -30,9 +30,9 @@ class TradingStrategy(Strategy):
             # Check the RSI conditions to decide on the allocation
             if latest_rsi > 80:
                 # If RSI > 80, allocate 100% to SHY
-                allocation[self.shy_ticker] = 1.0
+                allocation[self.shy_ticker] = 100.0
             elif latest_rsi < 80:
-                allocation[self.spy_ticker] = 1.0
+                allocation[self.spy_ticker] = 100.0
             # Else keep the previous allocation (not changing allocation if conditions don't match)
 
         return TargetAllocation(allocation)
