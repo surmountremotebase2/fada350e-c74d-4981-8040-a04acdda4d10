@@ -1,3 +1,6 @@
+from surmount.base_class import Strategy, TargetAllocation
+from surmount.data import Asset
+
 import pandas as pd
 
 def run(self, data):
