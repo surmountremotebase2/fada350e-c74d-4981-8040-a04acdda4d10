@@ -1,3 +1,5 @@
+import pandas as pd
+
 def run(self, data):
         # Initialize TQQQ allocation to 0
         allocation = {"TQQQ": 0, "BIL": 1}
